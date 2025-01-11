@@ -36,6 +36,8 @@ Voici un schéma simple avec Graphviz :
 
 .. graphviz::
 
-   digraph simple {
-       A -> B -> C -> A;
-   }
+    digraph G {
+        a -> b;
+        b -> c;
+        c -> a;
+    }
