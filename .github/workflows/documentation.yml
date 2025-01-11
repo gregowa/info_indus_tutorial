@@ -58,7 +58,7 @@ jobs:
           cd gh-pages
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          touch .nojekyll  # Empêche GitHub Pages d'ignorer les fichiers _static
+          touch .nojekyll
           git add .
           git commit -m "Update documentation" -a || true
           git push https://x-access-token:${GITHUB_TOKEN}@github.com/gregowa/info_indus_tutorial.git gh-pages
