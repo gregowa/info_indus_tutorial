@@ -28,3 +28,6 @@ Voici un tableau récapitulatif du matériel utilisé pour le pantographe :
 |                           | un accès rapide aux données.            |
 +---------------------------+-----------------------------------------+
 
+.. math::
+
+    a^2 + b^2 = c^2
