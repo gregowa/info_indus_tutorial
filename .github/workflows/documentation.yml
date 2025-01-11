@@ -1,4 +1,4 @@
-nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnname: Documentation
+name: Documentation
 
 on:
   push:
