@@ -1,0 +1,29 @@
+/* Force line wraping in code instead of horizontal scrolling */
+pre {
+    white-space: pre-wrap !important;
+    word-break: break-all;
+}
+
+/* Add the possibility to underline text */
+.underline {
+    text-decoration: underline;
+}
+
+/* Set a maximum width for the content and align it to the left */
+.wy-nav-content {
+    max-width: 800px;
+    /* Ajustez cette valeur selon vos besoins */
+    margin-left: 0;
+    margin-right: auto;
+}
+
+/** Allow caption from toctree to wrap nicely in sidebar */
+.wy-menu .caption-text {
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.1;
+    /* Increase line height to prevent overlap */
+    display: block;
+    /* Ensure the element takes up full width */
+}
