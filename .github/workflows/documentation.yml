@@ -24,7 +24,7 @@ jobs:
       # Étape 3 : Vérifier la structure des dossiers
       - name: Verify conf.py presence
         run: |
-          cd ./doc/sphinx/
+          cd ./doc/sphinx/source/
           ls -la
 
       # Étape 4 : Créer un environnement virtuel et installer les dépendances
@@ -34,7 +34,7 @@ jobs:
           python3 -m venv .venv
           .venv/bin/python3 -m pip install --upgrade pip
           .venv/bin/python3 -m pip install sphinx
-          .venv/bin/python3 -m pip install -r requirements.txt
+          .venv/bin/python3 -m pip install -r ./source/requirements.txt
 
       # Étape 5 : Construire la documentation
       - name: Build documentation
@@ -42,23 +42,9 @@ jobs:
           cd ./doc/sphinx/
           .venv/bin/python3 -m sphinx -b html ./source ./build/html
 
-      # Étape 6 : Mettre à jour la branche gh-pages
-      - name: Update gh-pages branch
-        run: |
-          git clone https://github.com/gregowa/info_indus_tutorial.git --branch gh-pages --single-branch gh-pages
-          mkdir -p gh-pages/docs/
-          cp -r ./doc/sphinx/build/html/* gh-pages/
-          cd gh-pages
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          touch .nojekyll
-          git add .
-          git commit -m "Update documentation" -a || true
-          git push origin gh-pages
-
-      - name: Push changes
-        uses: ad-m/github-push-action@master
+      # Étape 6 : Déployer sur gh-pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          branch: gh-pages
-          directory: gh-pages
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./doc/sphinx/build/html
