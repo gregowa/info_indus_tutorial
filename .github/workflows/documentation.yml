@@ -40,7 +40,7 @@ jobs:
       # Étape 5 : Cloner la branche gh-pages et mettre à jour la documentation
       - name: Update gh-pages branch
         run: |
-          git clone https://github.com/yguel/informatique_industrielle_avec_ROS2.git --branch gh-pages --single-branch gh-pages
+          git clone https://github.com/gregowa/info_indus_tutorial.git --branch gh-pages --single-branch gh-pages
           mkdir -p gh-pages/docs/
           cp -r ./doc/sphinx/build/html/* gh-pages/
           cd gh-pages
