@@ -1,51 +1,41 @@
 name: Documentation
 
+# Controls when the workflow will run
 on:
+  # Triggers the workflow on push or pull request events but only for the master branch
   push:
     branches: [rolling]
+
+  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  # This workflow contains a single job called "build"
   build_documentation:
+    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Étape 1 : Cloner le dépôt
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
-      # Étape 2 : Installer Python et pip
-      - name: Install Python and pip
+      - name: Install dependencies
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y -qq python3 python3-pip python3-venv
-          python3 --version
-          pip3 --version
-
-      # Étape 3 : Vérifier la structure des dossiers
-      - name: Verify conf.py presence
-        run: |
-          cd ./doc/sphinx/
-          ls -la
-
-      # Étape 4 : Créer un environnement virtuel et installer les dépendances
-      - name: Create virtual environment and install Sphinx
-        run: |
+          sudo apt-get install -y -qq python3-sphinx
           cd ./doc/sphinx/
           python3 -m venv .venv
-          .venv/bin/python3 -m pip install --upgrade pip
-          .venv/bin/python3 -m pip install sphinx
-          .venv/bin/python3 -m pip install -r requirements.txt
-
-      # Étape 5 : Construire la documentation
+          source .venv/bin/activate
+          pip install -r requirements.txt
       - name: Build documentation
         run: |
           cd ./doc/sphinx/
-          .venv/bin/python3 -m sphinx -b html ./source ./build/html
-
-      # Étape 6 : Mettre à jour la branche gh-pages
-      - name: Update gh-pages branch
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          source .venv/bin/activate
+          make html
+          cd ../..
+      - name: Create commit
         run: |
           git clone https://github.com/gregowa/info_indus_tutorial.git --branch gh-pages --single-branch gh-pages
           mkdir -p gh-pages/docs/
@@ -53,6 +43,12 @@ jobs:
           cd gh-pages
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
+          touch .nojekyll
           git add .
           git commit -m "Update documentation" -a || true
-          git push https://x-access-token:${GITHUB_TOKEN}@github.com/gregowa/info_indus_tutorial.git gh-pages
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          branch: gh-pages
+          directory: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
