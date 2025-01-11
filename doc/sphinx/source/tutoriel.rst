@@ -52,8 +52,7 @@ Lancer le noeud de lecture/écriture.
 Ouvrir un autre terminal et lancer la commande suivante :
 
 .. note::
-   Remplacer ``/dev/ttyUSB0`` par le port USB de votre appareil.*
-   
+   Pour vérifier l'état du couple moteur, il est recommandé de lancer la commande suivante.
       .. code-block:: bash
 
          ros2 topic echo /dynamixel_workbench/torque_enable
