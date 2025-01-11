@@ -31,3 +31,11 @@ Voici un tableau récapitulatif du matériel utilisé pour le pantographe :
 .. math::
 
     a^2 + b^2 = c^2
+
+Voici un schéma simple avec Graphviz :
+
+.. graphviz::
+
+   digraph simple {
+       A -> B -> C -> A;
+   }
