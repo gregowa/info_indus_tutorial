@@ -21,7 +21,13 @@ jobs:
           python3 --version
           pip3 --version
 
-      # Étape 3 : Vérifier l'installation et créer un environnement virtuel
+      # Étape 3 : Vérifier la structure des dossiers
+      - name: Verify conf.py presence
+        run: |
+          cd ./doc/sphinx/
+          ls -la
+
+      # Étape 4 : Créer un environnement virtuel et installer les dépendances
       - name: Create virtual environment and install Sphinx
         run: |
           cd ./doc/sphinx/
@@ -29,12 +35,6 @@ jobs:
           .venv/bin/python3 -m pip install --upgrade pip
           .venv/bin/python3 -m pip install sphinx
           .venv/bin/python3 -m pip install -r requirements.txt
-
-      # Étape 4 : Vérifier le contenu de l'environnement virtuel
-      - name: Check virtual environment
-        run: |
-          cd ./doc/sphinx/
-          ls -l .venv/bin
 
       # Étape 5 : Construire la documentation
       - name: Build documentation
