@@ -48,11 +48,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git clone https://github.com/gregowa/info_indus_tutorial.git --branch gh-pages --single-branch gh-pages
-          mkdir -p gh-pages/docs/
-          cp -r ./doc/sphinx/build/html/* gh-pages/
+          cp -r ./doc/sphinx/build/html/* gh-pages/  # Copie tous les fichiers HTML et _static
           cd gh-pages
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
+          touch .nojekyll  # Indique à GitHub Pages de ne pas ignorer les fichiers _static
           git add .
           git commit -m "Update documentation" -a || true
           git push https://x-access-token:${GITHUB_TOKEN}@github.com/gregowa/info_indus_tutorial.git gh-pages
