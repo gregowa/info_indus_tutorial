@@ -52,7 +52,8 @@ Lancer le noeud de lecture/écriture.
 Ouvrir un autre terminal et lancer la commande suivante :
 
 .. note::
-   Remplacer ``/dev/ttyUSB0`` par le port USB de votre appareil.
-   .. code-block:: bash
+   Remplacer ``/dev/ttyUSB0`` par le port USB de votre appareil.*
+   
+      .. code-block:: bash
 
-      ros2 topic echo /dynamixel_workbench/torque_enable
+         ros2 topic echo /dynamixel_workbench/torque_enable
