@@ -101,9 +101,9 @@
 </div>
 <section id="pc-setup">
 <h2>PC Setup<a class="headerlink" href="#pc-setup" title="Lien vers cette rubrique"></a></h2>
-<p>Création d’un espace de travail pour télécharger et installer la librairie.</p>
 <section id="download-dynamixelsdk">
 <h3>Download DynamixelSDK<a class="headerlink" href="#download-dynamixelsdk" title="Lien vers cette rubrique"></a></h3>
+<p>Création d’un espace de travail pour télécharger et installer la librairie.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span>~/robotics_ws/src
 <span class="nb">cd</span><span class="w"> </span>~/robotics_ws/src
 git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span><span class="nv">$ROS_DISTRO</span>-devel<span class="w"> </span>https://github.com/ROBOTIS-GIT/DynamixelSDK
@@ -133,15 +133,25 @@ sudo<span class="w"> </span>usermod<span class="w"> </span>-aG<span class="w"> <
 ros2<span class="w"> </span>run<span class="w"> </span>dynamixel_sdk_examples<span class="w"> </span>read_write_node
 </pre></div>
 </div>
-<p>Ouvrir un autre terminal et lancer la commande suivante :</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<dl>
-<dt>Pour vérifier l’état du couple moteur, il est recommandé de lancer la commande suivante.</dt><dd><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ros2<span class="w"> </span>topic<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>/dynamixel_workbench/torque_enable
+<p>Ouvrir un autre terminal et lancer la commande suivante afin de publier un message de position sur le topic /set_position. On appelle le moteur en utilisant l’ID 1 et en lui envoyant une position de 512.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ros2<span class="w"> </span>topic<span class="w"> </span>pub<span class="w"> </span>-l<span class="w"> </span>/set_position<span class="w"> </span>dynamixel_sdk_custom_interfaces/SetPosition<span class="w"> </span><span class="s2">&quot;{id: 1, position: 1000}&quot;</span>
 </pre></div>
 </div>
-</dd>
-</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Pour vérifier l’état du couple moteur, il est recommandé de lancer la commande à l’aide de la commande suivante :</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ros2<span class="w"> </span>topic<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>/dynamixel_workbench/dynamixel_state
+ros2<span class="w"> </span>topic<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>/dynamixel_workbench/torque_enable
+</pre></div>
+</div>
+<p>On appelle le serive /get_position de lecture de position en utilisant l’ID 1.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ros2<span class="w"> </span>service<span class="w"> </span>call<span class="w"> </span>/get_position<span class="w"> </span>dynamixel_sdk_custom_interfaces/srv/GetPosition<span class="w"> </span><span class="s2">&quot;{id: 1}&quot;</span>
+</pre></div>
+</div>
+<p>On peut publier un message /set_position en utilisant l’ID 1 et en lui envoyant une position de 0 par exemple.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ros2<span class="w"> </span>topic<span class="w"> </span>pub<span class="w"> </span>-l<span class="w"> </span>/set_position<span class="w"> </span>dynamixel_sdk_custom_interfaces/SetPosition<span class="w"> </span><span class="s2">&quot;{id: 1, position: 0}&quot;</span>
+</pre></div>
 </div>
 </section>
 </section>

@@ -9,10 +9,10 @@ Tutoriel DynamixelSDK
 PC Setup
 ********
 
-Création d'un espace de travail pour télécharger et installer la librairie.
-
 Download DynamixelSDK
 =====================
+
+Création d'un espace de travail pour télécharger et installer la librairie.
 
 .. code-block:: bash
 
@@ -49,10 +49,29 @@ Lancer le noeud de lecture/écriture.
    sudo usermod -aG dialout $USER
    ros2 run dynamixel_sdk_examples read_write_node
 
-Ouvrir un autre terminal et lancer la commande suivante :
+Ouvrir un autre terminal et lancer la commande suivante afin de publier un message de position sur le topic /set_position. On appelle le moteur en utilisant l'ID 1 et en lui envoyant une position de 512.
+
+.. code-block:: bash
+
+   ros2 topic pub -l /set_position dynamixel_sdk_custom_interfaces/SetPosition "{id: 1, position: 1000}"
 
 .. note::
-   Pour vérifier l'état du couple moteur, il est recommandé de lancer la commande suivante.
-      .. code-block:: bash
 
-         ros2 topic echo /dynamixel_workbench/torque_enable
+   Pour vérifier l'état du couple moteur, il est recommandé de lancer la commande à l'aide de la commande suivante :
+
+.. code-block:: bash
+
+   ros2 topic echo /dynamixel_workbench/dynamixel_state
+   ros2 topic echo /dynamixel_workbench/torque_enable
+
+On appelle le serive /get_position de lecture de position en utilisant l'ID 1.
+
+.. code-block:: bash
+
+   ros2 service call /get_position dynamixel_sdk_custom_interfaces/srv/GetPosition "{id: 1}"
+
+On peut publier un message /set_position en utilisant l'ID 1 et en lui envoyant une position de 0 par exemple.
+
+.. code-block:: bash
+
+   ros2 topic pub -l /set_position dynamixel_sdk_custom_interfaces/SetPosition "{id: 1, position: 0}"
