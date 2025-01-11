@@ -42,7 +42,7 @@ jobs:
           cd ./doc/sphinx/
           .venv/bin/python3 -m sphinx -b html ./source ./build/html
 
-      # Étape 7 : Mettre à jour la branche gh-pages
+      # Étape 6 : Mettre à jour la branche gh-pages
       - name: Update gh-pages branch
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
