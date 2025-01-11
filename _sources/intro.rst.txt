@@ -27,3 +27,4 @@ Voici un tableau récapitulatif du matériel utilisé pour le pantographe :
 |                           | utile pour les applications nécessitant |
 |                           | un accès rapide aux données.            |
 +---------------------------+-----------------------------------------+
+
