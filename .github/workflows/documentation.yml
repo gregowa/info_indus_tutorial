@@ -55,3 +55,10 @@ jobs:
           git add .
           git commit -m "Update documentation" -a || true
           git push origin gh-pages
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          branch: gh-pages
+          directory: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
