@@ -30,7 +30,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'Projet d’Informatique Industrielle avec ROS 2'
+project = 'Projet Informatique Industrielle avec ROS 2'
 copyright = '2025, Valentin GIRARDET & Grégory WAILLE'
 author = 'Valentin GIRARDET & Grégory WAILLE'
 

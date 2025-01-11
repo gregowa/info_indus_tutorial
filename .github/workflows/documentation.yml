@@ -40,7 +40,7 @@ jobs:
       - name: Build documentation
         run: |
           cd ./doc/sphinx/
-          .venv/bin/python3 -m sphinx -b html . ./build/html
+          .venv/bin/python3 -m sphinx -b html ./source ./build/html
 
       # Étape 6 : Mettre à jour la branche gh-pages
       - name: Update gh-pages branch
