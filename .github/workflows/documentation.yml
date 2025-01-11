@@ -21,21 +21,28 @@ jobs:
           python3 --version
           pip3 --version
 
-      # Étape 3 : Créer un environnement virtuel et installer les dépendances
+      # Étape 3 : Vérifier l'installation et créer un environnement virtuel
       - name: Create virtual environment and install Sphinx
         run: |
           cd ./doc/sphinx/
           python3 -m venv .venv
           .venv/bin/python3 -m pip install --upgrade pip
+          .venv/bin/python3 -m pip install sphinx
           .venv/bin/python3 -m pip install -r requirements.txt
 
-      # Étape 4 : Construire la documentation
+      # Étape 4 : Vérifier le contenu de l'environnement virtuel
+      - name: Check virtual environment
+        run: |
+          cd ./doc/sphinx/
+          ls -l .venv/bin
+
+      # Étape 5 : Construire la documentation
       - name: Build documentation
         run: |
           cd ./doc/sphinx/
-          .venv/bin/sphinx-build -b html . ./build/html
+          .venv/bin/python3 -m sphinx -b html . ./build/html
 
-      # Étape 5 : Mettre à jour la branche gh-pages
+      # Étape 6 : Mettre à jour la branche gh-pages
       - name: Update gh-pages branch
         run: |
           git clone https://github.com/gregowa/info_indus_tutorial.git --branch gh-pages --single-branch gh-pages
