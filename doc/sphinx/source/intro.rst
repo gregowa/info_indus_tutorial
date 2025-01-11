@@ -27,17 +27,3 @@ Voici un tableau récapitulatif du matériel utilisé pour le pantographe :
 |                           | utile pour les applications nécessitant |
 |                           | un accès rapide aux données.            |
 +---------------------------+-----------------------------------------+
-
-.. math::
-
-    a^2 + b^2 = c^2
-
-Voici un schéma simple avec Graphviz :
-
-.. graphviz::
-
-    digraph G {
-        a -> b;
-        b -> c;
-        c -> a;
-    }
