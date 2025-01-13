@@ -58,6 +58,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#installer-dynamixelsdk">Installer DynamixelSDK</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#lancer-dynamixelsdk">Lancer DynamixelSDK</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#verification-de-la-connexion-usb">Vérification de la connexion USB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#controle-du-moteur">Contrôle du moteur</a></li>
 </ul>
 </li>
 </ul>
@@ -103,6 +104,34 @@
 git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span><span class="nv">$ROS_DISTRO</span>-devel<span class="w"> </span>https://github.com/ROBOTIS-GIT/DynamixelSDK
 </pre></div>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Si on vous demande de vous connecter avec un nom d’utilisateur et un mot de passe, cela signifie que vous utilisez l’URL HTTPS pour cloner le dépôt. Pour éviter cela, vous pouvez utiliser une clé SSH. Voici les étapes à suivre :</p>
+<ol class="arabic">
+<li><p>Générer une clé SSH (si vous n’en avez pas déjà une) :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ssh-keygen<span class="w"> </span>-t<span class="w"> </span>rsa<span class="w"> </span>-C<span class="w"> </span><span class="s2">&quot;your_email@example.com&quot;</span><span class="w"> </span>-f<span class="w"> </span>.ssh/id_rsa
+</pre></div>
+</div>
+</li>
+<li><p>Ajouter la clé SSH à votre compte GitHub :</p>
+<ul>
+<li><p>Copiez le contenu de votre clé publique :</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>~/.ssh/id_rsa.pub
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Ajoutez cette clé à votre compte GitHub sous <strong>Settings &gt; SSH and GPG keys</strong>.</p></li>
+</ul>
+</li>
+<li><p>Mettre à jour la commande de clonage pour utiliser l’URL SSH :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span><span class="nv">$ROS_DISTRO</span>-devel<span class="w"> </span>git@github.com:ROBOTIS-GIT/DynamixelSDK.git
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
 <p>On construit les paquets ROS 2 en utilisant la commande <code class="docutils literal notranslate"><span class="pre">colcon</span> <span class="pre">build</span></code> dans notre espace de travail.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/robotics_ws<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>colcon<span class="w"> </span>build<span class="w"> </span>--symlink-install
 <span class="nb">source</span><span class="w"> </span>/opt/ros/<span class="nv">$ROS_DISTRO</span>/setup.bash
@@ -115,31 +144,32 @@ git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </spa
 <h2>Lancer DynamixelSDK<a class="headerlink" href="#lancer-dynamixelsdk" title="Lien vers cette rubrique"></a></h2>
 <section id="verification-de-la-connexion-usb">
 <h3>Vérification de la connexion USB<a class="headerlink" href="#verification-de-la-connexion-usb" title="Lien vers cette rubrique"></a></h3>
-<p>Vérifier la connexion USB de votre appareil.
-Autoriser l’accès à l’utilisateur.
-Lancer le noeud de lecture/écriture.</p>
+<p>Vérifier la connexion USB de votre appareil et autoriser l’accès à l’utilisateur <code class="docutils literal notranslate"><span class="pre">$USER</span></code> puis lancer le noeud de lecture/écriture.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-l<span class="w"> </span>/dev/tty*
 sudo<span class="w"> </span>usermod<span class="w"> </span>-aG<span class="w"> </span>dialout<span class="w"> </span><span class="nv">$USER</span>
 ros2<span class="w"> </span>run<span class="w"> </span>dynamixel_sdk_examples<span class="w"> </span>read_write_node
 </pre></div>
 </div>
-<p>Ouvrir un autre terminal et lancer la commande suivante afin de publier un message de position sur le topic /set_position. On appelle le moteur en utilisant l’ID 1 et en lui envoyant une position de 512.</p>
+</section>
+<section id="controle-du-moteur">
+<h3>Contrôle du moteur<a class="headerlink" href="#controle-du-moteur" title="Lien vers cette rubrique"></a></h3>
+<p>Ouvrir un autre terminal et lancer la commande suivante afin de publier un message de position sur le topic <code class="docutils literal notranslate"><span class="pre">/set_position</span></code>. On appelle le moteur en utilisant l’ID 1 et en lui envoyant une position de 512.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ros2<span class="w"> </span>topic<span class="w"> </span>pub<span class="w"> </span>-l<span class="w"> </span>/set_position<span class="w"> </span>dynamixel_sdk_custom_interfaces/SetPosition<span class="w"> </span><span class="s2">&quot;{id: 1, position: 1000}&quot;</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Pour vérifier l’état du couple moteur, il est recommandé de lancer la commande à l’aide de la commande suivante :</p>
-</div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ros2<span class="w"> </span>topic<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>/dynamixel_workbench/dynamixel_state
 ros2<span class="w"> </span>topic<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>/dynamixel_workbench/torque_enable
 </pre></div>
 </div>
-<p>On appelle le serive /get_position de lecture de position en utilisant l’ID 1.</p>
+</div>
+<p>On appelle le serive <code class="docutils literal notranslate"><span class="pre">/get_position</span></code> de lecture de position en utilisant l’ID 1.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ros2<span class="w"> </span>service<span class="w"> </span>call<span class="w"> </span>/get_position<span class="w"> </span>dynamixel_sdk_custom_interfaces/srv/GetPosition<span class="w"> </span><span class="s2">&quot;{id: 1}&quot;</span>
 </pre></div>
 </div>
-<p>On peut publier un message /set_position en utilisant l’ID 1 et en lui envoyant une position de 0 par exemple.</p>
+<p>On peut publier un message <code class="docutils literal notranslate"><span class="pre">/set_position</span></code> en utilisant l’ID 1 et en lui envoyant une position de 0 par exemple.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ros2<span class="w"> </span>topic<span class="w"> </span>pub<span class="w"> </span>-l<span class="w"> </span>/set_position<span class="w"> </span>dynamixel_sdk_custom_interfaces/SetPosition<span class="w"> </span><span class="s2">&quot;{id: 1, position: 0}&quot;</span>
 </pre></div>
 </div>

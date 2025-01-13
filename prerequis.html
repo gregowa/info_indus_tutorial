@@ -91,45 +91,22 @@
 <h1>Prérequis<a class="headerlink" href="#prerequis" title="Lien vers cette rubrique"></a></h1>
 <section id="installation-de-vscode">
 <h2>Installation de VSCode<a class="headerlink" href="#installation-de-vscode" title="Lien vers cette rubrique"></a></h2>
+<p>Il est fortement recommandé d’utiliser Visual Studio Code pour éditer les fichiers de code. Pour installer VSCode, vous devez d’abord télécharger le logiciel sur le <a class="reference external" href="https://code.visualstudio.com/download">site officiel</a></p>
 </section>
 <section id="installation-de-ros-2-humble-pour-ubuntu-linux-22-04">
 <h2>Installation de ROS 2 Humble pour Ubuntu Linux 22.04<a class="headerlink" href="#installation-de-ros-2-humble-pour-ubuntu-linux-22-04" title="Lien vers cette rubrique"></a></h2>
-<p>Installer ROS 2 Humble pour Ubuntu Linux 22.04 avant de commencer le tutoriel.</p>
-<p>Suivre l’installation jusqu’au point <strong>Install additional DDS implementations (optional)</strong>.</p>
-<p><a class="reference external" href="https://docs.ros.org/en/humble/Installation/Alternatives/Ubuntu-Development-Setup.html">Lien vers l’installation</a></p>
+<p>Installer ROS 2 Humble pour Ubuntu Linux 22.04 avant de commencer le tutoriel en suivant la documentation officielle de ROS 2 Humble. Suivre l’installation jusqu’au point <strong>Install additional DDS implementations (optional)</strong>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Lien vers l’installation <a class="reference external" href="https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html">ici</a>.</p>
+</div>
 </section>
 <section id="creation-d-un-compte-github-et-d-une-cle-ssh">
 <h2>Création d’un compte Github et d’une clé SSH<a class="headerlink" href="#creation-d-un-compte-github-et-d-une-cle-ssh" title="Lien vers cette rubrique"></a></h2>
-<p>Suivre le tutoriel sur ce lien pour créer un compte Github et créer une clé SSH :</p>
-<p><a class="reference external" href="https://yguel.github.io/informatique_industrielle_avec_ROS2/c01_create_and_publish_doc/p01s05_www_doc.html#creer-un-depot-sur-github">Tutoriel</a></p>
+<p>Il va falloir créer un compte Github pour pouvoir cloner le dépôt de DynamixelSDK. Il sera nécessaire de créer une clé SSH pour éviter de devoir rentrer son nom d’utilisateur et son mot de passe à chaque fois que l’on veut cloner un dépôt.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Si on vous demande de vous connecter avec un nom d’utilisateur et un mot de passe, cela signifie que vous utilisez l’URL HTTPS pour cloner le dépôt.
-Pour éviter cela, vous pouvez utiliser une clé SSH. Voici les étapes à suivre :</p>
-<ol class="arabic">
-<li><p>Générer une clé SSH (si vous n’en avez pas déjà une) :</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ssh-keygen<span class="w"> </span>-t<span class="w"> </span>rsa<span class="w"> </span>-C<span class="w"> </span><span class="s2">&quot;your_email@example.com&quot;</span><span class="w"> </span>-f<span class="w"> </span>.ssh/id_rsa
-</pre></div>
-</div>
-</li>
-<li><p>Ajouter la clé SSH à votre compte GitHub :</p>
-<ul>
-<li><p>Copiez le contenu de votre clé publique :</p>
-<blockquote>
-<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>~/.ssh/id_rsa.pub
-</pre></div>
-</div>
-</div></blockquote>
-</li>
-<li><p>Ajoutez cette clé à votre compte GitHub sous <strong>Settings &gt; SSH and GPG keys</strong>.</p></li>
-</ul>
-</li>
-<li><p>Mettre à jour la commande de clonage pour utiliser l’URL SSH :</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span><span class="nv">$ROS_DISTRO</span>-devel<span class="w"> </span>git@github.com:ROBOTIS-GIT/DynamixelSDK.git
-</pre></div>
-</div>
-</li>
-</ol>
+<p>Si vous avez déjà un compte Github et une clé SSH, vous pouvez passer cette étape. Sinon suivez le tutoriel <a class="reference external" href="https://yguel.github.io/informatique_industrielle_avec_ROS2/c01_create_and_publish_doc/p01s05_www_doc.html#creer-un-depot-sur-github">ici</a>.</p>
 </div>
 </section>
 </section>
