@@ -55,12 +55,8 @@
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="prerequis.html">Prérequis</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Tutoriel DynamixelSDK</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#pc-setup">PC Setup</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#download-dynamixelsdk">Download DynamixelSDK</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#install-dynamixelsdk">Install DynamixelSDK</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#run">Run</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installer-dynamixelsdk">Installer DynamixelSDK</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lancer-dynamixelsdk">Lancer DynamixelSDK</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#verification-de-la-connexion-usb">Vérification de la connexion USB</a></li>
 </ul>
 </li>
@@ -97,22 +93,17 @@
 <h1>Tutoriel DynamixelSDK<a class="headerlink" href="#tutoriel-dynamixelsdk" title="Lien vers cette rubrique"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Ce tutoriel est basé sur le tutoriel officiel de ROBOTIS. Vous pouvez le consulter <a class="reference external" href="https://emanual.robotis.com/docs/en/software/dynamixel/dynamixel_sdk/overview/">ici</a>.</p>
+<p>Ce tutoriel est basé sur le tutoriel YouTube de ROBOTIS OpenSourceTeam. Vous pouvez le consulter <a class="reference external" href="https://www.youtube.com/watch?v=E8XPqDjof4U/">ici</a>.</p>
 </div>
-<section id="pc-setup">
-<h2>PC Setup<a class="headerlink" href="#pc-setup" title="Lien vers cette rubrique"></a></h2>
-<section id="download-dynamixelsdk">
-<h3>Download DynamixelSDK<a class="headerlink" href="#download-dynamixelsdk" title="Lien vers cette rubrique"></a></h3>
-<p>Création d’un espace de travail pour télécharger et installer la librairie.</p>
+<section id="installer-dynamixelsdk">
+<h2>Installer DynamixelSDK<a class="headerlink" href="#installer-dynamixelsdk" title="Lien vers cette rubrique"></a></h2>
+<p>Commencer par créer un dossier de travail et cloner le dépôt de DynamixelSDK en remplaçant <code class="docutils literal notranslate"><span class="pre">$ROS_DISTRO</span></code> par votre distribution ROS (ex: foxy, humble, etc.).</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span>~/robotics_ws/src
 <span class="nb">cd</span><span class="w"> </span>~/robotics_ws/src
 git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span><span class="nv">$ROS_DISTRO</span>-devel<span class="w"> </span>https://github.com/ROBOTIS-GIT/DynamixelSDK
 </pre></div>
 </div>
-</section>
-<section id="install-dynamixelsdk">
-<h3>Install DynamixelSDK<a class="headerlink" href="#install-dynamixelsdk" title="Lien vers cette rubrique"></a></h3>
-<p>Téléchagement et installation de la librairie.</p>
+<p>On construit les paquets ROS 2 en utilisant la commande <code class="docutils literal notranslate"><span class="pre">colcon</span> <span class="pre">build</span></code> dans notre espace de travail.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/robotics_ws<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>colcon<span class="w"> </span>build<span class="w"> </span>--symlink-install
 <span class="nb">source</span><span class="w"> </span>/opt/ros/<span class="nv">$ROS_DISTRO</span>/setup.bash
 <span class="nb">cd</span><span class="w"> </span>~/robotics_ws
@@ -120,9 +111,8 @@ git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </spa
 </pre></div>
 </div>
 </section>
-</section>
-<section id="run">
-<h2>Run<a class="headerlink" href="#run" title="Lien vers cette rubrique"></a></h2>
+<section id="lancer-dynamixelsdk">
+<h2>Lancer DynamixelSDK<a class="headerlink" href="#lancer-dynamixelsdk" title="Lien vers cette rubrique"></a></h2>
 <section id="verification-de-la-connexion-usb">
 <h3>Vérification de la connexion USB<a class="headerlink" href="#verification-de-la-connexion-usb" title="Lien vers cette rubrique"></a></h3>
 <p>Vérifier la connexion USB de votre appareil.

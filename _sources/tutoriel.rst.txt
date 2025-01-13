@@ -3,16 +3,13 @@ Tutoriel DynamixelSDK
 #####################
 
 .. note::
-   Ce tutoriel est basé sur le tutoriel officiel de ROBOTIS. Vous pouvez le consulter `ici <https://emanual.robotis.com/docs/en/software/dynamixel/dynamixel_sdk/overview/>`_.
+   Ce tutoriel est basé sur le tutoriel YouTube de ROBOTIS OpenSourceTeam. Vous pouvez le consulter `ici <https://www.youtube.com/watch?v=E8XPqDjof4U/>`_.
 
-********
-PC Setup
-********
+**********************
+Installer DynamixelSDK
+**********************
 
-Download DynamixelSDK
-=====================
-
-Création d'un espace de travail pour télécharger et installer la librairie.
+Commencer par créer un dossier de travail et cloner le dépôt de DynamixelSDK en remplaçant ``$ROS_DISTRO`` par votre distribution ROS (ex: foxy, humble, etc.).
 
 .. code-block:: bash
 
@@ -20,10 +17,7 @@ Création d'un espace de travail pour télécharger et installer la librairie.
    cd ~/robotics_ws/src
    git clone -b $ROS_DISTRO-devel https://github.com/ROBOTIS-GIT/DynamixelSDK
 
-Install DynamixelSDK
-====================
-
-Téléchagement et installation de la librairie.
+On construit les paquets ROS 2 en utilisant la commande ``colcon build`` dans notre espace de travail.
 
 .. code-block:: bash
 
@@ -32,9 +26,9 @@ Téléchagement et installation de la librairie.
    cd ~/robotics_ws
    . install/setup.bash
 
-***
-Run
-***
+*******************
+Lancer DynamixelSDK
+*******************
 
 Vérification de la connexion USB
 ================================
