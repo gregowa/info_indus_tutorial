@@ -114,6 +114,7 @@ source_suffix = [".rst", ".md"]
 
 html_theme = 'sphinx_rtd_theme'
 
+html_logo = "ressources/img/dynamixel_sdk_logo.jpg"
 
 html_sidebars = {
 

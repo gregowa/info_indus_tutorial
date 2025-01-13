@@ -95,3 +95,65 @@ On peut publier un message ``/set_position`` en utilisant l'ID 1 et en lui envoy
 .. code-block:: bash
 
    ros2 topic pub -l /set_position dynamixel_sdk_custom_interfaces/SetPosition "{id: 1, position: 0}"
+
+*******************
+Example de code C++
+*******************
+
+Code complet
+============
+
+Il est maintenant le temps de réaliser un exemple de code C++ pour lire et écrire des données sur un moteur Dynamixel AX12A. Vous pouvez consulter le code complet ci-dessous.
+
+.. raw:: html
+
+   <details>
+   <summary>Afficher le code complet :</summary>
+
+.. literalinclude:: ressources/code/read_write_node.cpp
+   :language: cpp
+   :caption: Fichier cpp read_write_node.cpp
+   :linenos:
+
+.. raw:: html
+
+   </details>
+
+.. raw:: html
+
+   <br><br>
+
+Explication du code
+===================
+
+Cette partie décrit comment exécuter l'exemple, comment publier sur le topic ``/set_position`` et comment faire une requête de service pour lire la position du moteur.
+
+.. literalinclude:: ressources/code/read_write_node.cpp
+   :language: cpp
+   :caption: Lignes 15 à 28 du fichier read_write_node.cpp
+   :linenos:
+   :lines: 15-28
+
+Cette partie du code définit ``set_position_subscriber_`` pour souscrire au topic ``/set_position`` et appeler la fonction ``setPositionCallback`` à chaque fois qu'un message est publié sur ce topic.
+
+.. literalinclude:: ressources/code/read_write_node.cpp
+   :language: cpp
+   :caption: Lignes 74 à 105 du fichier read_write_node.cpp
+   :linenos:
+   :lines: 74-105
+
+Cette partie du code définit le service ``get_position_service_`` pour lire la position du moteur en utilisant l'ID fourni dans la requête de service.
+
+.. literalinclude:: ressources/code/read_write_node.cpp
+   :language: cpp
+   :caption: Lignes 107 à 133 du fichier read_write_node.cpp
+   :linenos:
+   :lines: 107-133
+
+Dans le main, on itinitialise ``portHandler_`` et ``packetHandler_`` pour communiquer avec le moteur.
+
+.. literalinclude:: ressources/code/read_write_node.cpp
+   :language: cpp
+   :caption: Lignes 174 à 175 du fichier read_write_node.cpp
+   :linenos:
+   :lines: 174-175
