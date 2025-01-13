@@ -41,6 +41,7 @@
           
           <a href="index.html" class="icon icon-home">
             Projet Informatique Industrielle avec ROS 2
+              <img src="_static/dynamixel_sdk_logo.jpg" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -52,7 +53,11 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Tables des matières</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#maquette">Maquette</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="prerequis.html">Prérequis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutoriel.html">Tutoriel DynamixelSDK</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossaire.html">Glossaire</a></li>
@@ -84,40 +89,29 @@
              
   <section id="introduction">
 <h1>Introduction<a class="headerlink" href="#introduction" title="Lien vers cette rubrique"></a></h1>
-<p>Le pantographe est un dispositif mécanique utilisé pour copier, agrandir ou réduire des dessins. Il est composé de plusieurs bras articulés qui permettent de reproduire fidèlement les mouvements d’un stylet sur une surface de travail.</p>
-<p>Voici un tableau récapitulatif du matériel utilisé pour le pantographe :</p>
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Matériel</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>2x Dynamixel AX-12A</p></td>
-<td><p>Servomoteurs permettant le mouvement
-précis et contrôlé des bras du
-pantographe.</p></td>
-</tr>
-<tr class="row-odd"><td><p>U2D2 Power Hub Board</p></td>
-<td><p>Carte d’alimentation utilisée pour
-fournir l’énergie nécessaire aux
-servomoteurs et autres composants.</p></td>
-</tr>
-<tr class="row-even"><td><p>Raspberry Pi 5</p></td>
-<td><p>Ordinateur monocarte utilisé comme
-cerveau du pantographe, permettant de
-contrôler les mouvements et de gérer
-les entrées et sorties.</p></td>
-</tr>
-<tr class="row-odd"><td><p>Pimoroni Base NVMe
-(optionnel)</p></td>
-<td><p>Base pour ajouter un
-stockage NVMe rapide au Raspberry Pi,
-utile pour les applications nécessitant
-un accès rapide aux données.</p></td>
-</tr>
-</tbody>
-</table>
+<p>Le pantographe est un dispositif mécanique utilisé pour copier, agrandir ou réduire des dessins. Il est composé de plusieurs bras articulés qui permettent de reproduire fidèlement les mouvements d’un stylet sur une surface de travail. Dans ce projet, nous allons utiliser un pantographe pour dessiner des formes géométriques simples sur une feuille de papier. Pour cela, nous allons contrôler les servomoteurs Dynamixel AX12A à l’aide d’une Raspberry Pi 5 et d’un U2D2 Power Hub Board.</p>
+<section id="maquette">
+<h2>Maquette<a class="headerlink" href="#maquette" title="Lien vers cette rubrique"></a></h2>
+<p>Pour dessiner des formes géométriques simples, nous allons utiliser un pantographe ci-dessous :</p>
+<figure class="align-center" id="id1">
+<a class="reference internal image-reference" href="_images/pantographe.png"><img alt="Pantographe pour dessiner des formes géométriques simples" src="_images/pantographe.png" style="width: 600px;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Pantographe pour dessiner des formes géométriques simples</span><a class="headerlink" href="#id1" title="Lien vers cette image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Lien vers cette rubrique"></a></h2>
+<p>Pour contrôler les servomoteurs Dynamixel AX12A du pantographe, voici comment brancher les différents composants :</p>
+<figure class="align-center" id="id2">
+<a class="reference internal image-reference" href="_images/setup.jpg"><img alt="Configuration pour le contrôle des servomoteurs Dynamixel AX12A avec une Raspberry Pi 5 et un U2D2 Power Hub" src="_images/setup.jpg" style="width: 600px;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Branchement des servomoteurs Dynamixel AX12A avec une Raspberry Pi 5 et un U2D2 Power Hub</span><a class="headerlink" href="#id2" title="Lien vers cette image"></a></p>
+</figcaption>
+</figure>
+</section>
 </section>
 
 

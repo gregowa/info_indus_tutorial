@@ -41,6 +41,7 @@
           
           <a href="index.html" class="icon icon-home">
             Projet Informatique Industrielle avec ROS 2
+              <img src="_static/dynamixel_sdk_logo.jpg" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -59,6 +60,11 @@
 <li class="toctree-l2"><a class="reference internal" href="#lancer-dynamixelsdk">Lancer DynamixelSDK</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#verification-de-la-connexion-usb">Vérification de la connexion USB</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#controle-du-moteur">Contrôle du moteur</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#example-de-code-c">Example de code C++</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#code-complet">Code complet</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#explication-du-code">Explication du code</a></li>
 </ul>
 </li>
 </ul>
@@ -172,6 +178,334 @@ ros2<span class="w"> </span>topic<span class="w"> </span><span class="nb">echo</
 <p>On peut publier un message <code class="docutils literal notranslate"><span class="pre">/set_position</span></code> en utilisant l’ID 1 et en lui envoyant une position de 0 par exemple.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ros2<span class="w"> </span>topic<span class="w"> </span>pub<span class="w"> </span>-l<span class="w"> </span>/set_position<span class="w"> </span>dynamixel_sdk_custom_interfaces/SetPosition<span class="w"> </span><span class="s2">&quot;{id: 1, position: 0}&quot;</span>
 </pre></div>
+</div>
+</section>
+</section>
+<section id="example-de-code-c">
+<h2>Example de code C++<a class="headerlink" href="#example-de-code-c" title="Lien vers cette rubrique"></a></h2>
+<section id="code-complet">
+<h3>Code complet<a class="headerlink" href="#code-complet" title="Lien vers cette rubrique"></a></h3>
+<p>Il est maintenant le temps de réaliser un exemple de code C++ pour lire et écrire des données sur un moteur Dynamixel AX12A. Vous pouvez consulter le code complet ci-dessous.</p>
+<details>
+<summary>Afficher le code complet :</summary><div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">Fichier cpp read_write_node.cpp</span><a class="headerlink" href="#id1" title="Lien vers ce code"></a></div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos">  1</span><span class="c1">// Copyright 2021 ROBOTIS CO., LTD.</span>
+<span class="linenos">  2</span><span class="c1">//</span>
+<span class="linenos">  3</span><span class="c1">// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="linenos">  4</span><span class="c1">// you may not use this file except in compliance with the License.</span>
+<span class="linenos">  5</span><span class="c1">// You may obtain a copy of the License at</span>
+<span class="linenos">  6</span><span class="c1">//</span>
+<span class="linenos">  7</span><span class="c1">//     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="linenos">  8</span><span class="c1">//</span>
+<span class="linenos">  9</span><span class="c1">// Unless required by applicable law or agreed to in writing, software</span>
+<span class="linenos"> 10</span><span class="c1">// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="linenos"> 11</span><span class="c1">// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="linenos"> 12</span><span class="c1">// See the License for the specific language governing permissions and</span>
+<span class="linenos"> 13</span><span class="c1">// limitations under the License.</span>
+<span class="linenos"> 14</span>
+<span class="linenos"> 15</span><span class="cm">/*******************************************************************************</span>
+<span class="linenos"> 16</span><span class="cm">// This example is written for DYNAMIXEL X(excluding XL-320) and MX(2.0) series with U2D2.</span>
+<span class="linenos"> 17</span><span class="cm">// For other series, please refer to the product eManual and modify the Control Table addresses and other definitions.</span>
+<span class="linenos"> 18</span><span class="cm">// To test this example, please follow the commands below.</span>
+<span class="linenos"> 19</span><span class="cm">//</span>
+<span class="linenos"> 20</span><span class="cm">// Open terminal #1</span>
+<span class="linenos"> 21</span><span class="cm">// $ ros2 run dynamixel_sdk_examples read_write_node</span>
+<span class="linenos"> 22</span><span class="cm">//</span>
+<span class="linenos"> 23</span><span class="cm">// Open terminal #2 (run one of below commands at a time)</span>
+<span class="linenos"> 24</span><span class="cm">// $ ros2 topic pub -1 /set_position dynamixel_sdk_custom_interfaces/SetPosition &quot;{id: 1, position: 1000}&quot;</span>
+<span class="linenos"> 25</span><span class="cm">// $ ros2 service call /get_position dynamixel_sdk_custom_interfaces/srv/GetPosition &quot;id: 1&quot;</span>
+<span class="linenos"> 26</span><span class="cm">//</span>
+<span class="linenos"> 27</span><span class="cm">// Author: Will Son</span>
+<span class="linenos"> 28</span><span class="cm">*******************************************************************************/</span>
+<span class="linenos"> 29</span>
+<span class="linenos"> 30</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdio&gt;</span>
+<span class="linenos"> 31</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span>
+<span class="linenos"> 32</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="linenos"> 33</span>
+<span class="linenos"> 34</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;dynamixel_sdk/dynamixel_sdk.h&quot;</span>
+<span class="linenos"> 35</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;dynamixel_sdk_custom_interfaces/msg/set_position.hpp&quot;</span>
+<span class="linenos"> 36</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;dynamixel_sdk_custom_interfaces/srv/get_position.hpp&quot;</span>
+<span class="linenos"> 37</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;rclcpp/rclcpp.hpp&quot;</span>
+<span class="linenos"> 38</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;rcutils/cmdline_parser.h&quot;</span>
+<span class="linenos"> 39</span>
+<span class="linenos"> 40</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;read_write_node.hpp&quot;</span>
+<span class="linenos"> 41</span>
+<span class="linenos"> 42</span><span class="c1">// Control table address for X series (except XL-320)</span>
+<span class="linenos"> 43</span><span class="cp">#define ADDR_OPERATING_MODE 11</span>
+<span class="linenos"> 44</span><span class="cp">#define ADDR_TORQUE_ENABLE 64</span>
+<span class="linenos"> 45</span><span class="cp">#define ADDR_GOAL_POSITION 116</span>
+<span class="linenos"> 46</span><span class="cp">#define ADDR_PRESENT_POSITION 132</span>
+<span class="linenos"> 47</span>
+<span class="linenos"> 48</span><span class="c1">// Protocol version</span>
+<span class="linenos"> 49</span><span class="cp">#define PROTOCOL_VERSION 2.0  </span><span class="c1">// Default Protocol version of DYNAMIXEL X series.</span>
+<span class="linenos"> 50</span>
+<span class="linenos"> 51</span><span class="c1">// Default setting</span>
+<span class="linenos"> 52</span><span class="cp">#define BAUDRATE 57600  </span><span class="c1">// Default Baudrate of DYNAMIXEL X series</span>
+<span class="linenos"> 53</span><span class="cp">#define DEVICE_NAME &quot;/dev/ttyUSB0&quot;  </span><span class="c1">// [Linux]: &quot;/dev/ttyUSB*&quot;, [Windows]: &quot;COM*&quot;</span>
+<span class="linenos"> 54</span>
+<span class="linenos"> 55</span><span class="n">dynamixel</span><span class="o">::</span><span class="n">PortHandler</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">portHandler</span><span class="p">;</span>
+<span class="linenos"> 56</span><span class="n">dynamixel</span><span class="o">::</span><span class="n">PacketHandler</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">packetHandler</span><span class="p">;</span>
+<span class="linenos"> 57</span>
+<span class="linenos"> 58</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">dxl_error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos"> 59</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">goal_position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos"> 60</span><span class="kt">int</span><span class="w"> </span><span class="n">dxl_comm_result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">COMM_TX_FAIL</span><span class="p">;</span>
+<span class="linenos"> 61</span>
+<span class="linenos"> 62</span><span class="n">ReadWriteNode</span><span class="o">::</span><span class="n">ReadWriteNode</span><span class="p">()</span>
+<span class="linenos"> 63</span><span class="o">:</span><span class="w"> </span><span class="n">Node</span><span class="p">(</span><span class="s">&quot;read_write_node&quot;</span><span class="p">)</span>
+<span class="linenos"> 64</span><span class="p">{</span>
+<span class="linenos"> 65</span><span class="w">  </span><span class="n">RCLCPP_INFO</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">get_logger</span><span class="p">(),</span><span class="w"> </span><span class="s">&quot;Run read write node&quot;</span><span class="p">);</span>
+<span class="linenos"> 66</span>
+<span class="linenos"> 67</span><span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">declare_parameter</span><span class="p">(</span><span class="s">&quot;qos_depth&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">);</span>
+<span class="linenos"> 68</span><span class="w">  </span><span class="kt">int8_t</span><span class="w"> </span><span class="n">qos_depth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos"> 69</span><span class="w">  </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">get_parameter</span><span class="p">(</span><span class="s">&quot;qos_depth&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">qos_depth</span><span class="p">);</span>
+<span class="linenos"> 70</span>
+<span class="linenos"> 71</span><span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">QOS_RKL10V</span><span class="w"> </span><span class="o">=</span>
+<span class="linenos"> 72</span><span class="w">    </span><span class="n">rclcpp</span><span class="o">::</span><span class="n">QoS</span><span class="p">(</span><span class="n">rclcpp</span><span class="o">::</span><span class="n">KeepLast</span><span class="p">(</span><span class="n">qos_depth</span><span class="p">)).</span><span class="n">reliable</span><span class="p">().</span><span class="n">durability_volatile</span><span class="p">();</span>
+<span class="linenos"> 73</span>
+<span class="linenos"> 74</span><span class="w">  </span><span class="n">set_position_subscriber_</span><span class="w"> </span><span class="o">=</span>
+<span class="linenos"> 75</span><span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">create_subscription</span><span class="o">&lt;</span><span class="n">SetPosition</span><span class="o">&gt;</span><span class="p">(</span>
+<span class="linenos"> 76</span><span class="w">    </span><span class="s">&quot;set_position&quot;</span><span class="p">,</span>
+<span class="linenos"> 77</span><span class="w">    </span><span class="n">QOS_RKL10V</span><span class="p">,</span>
+<span class="linenos"> 78</span><span class="w">    </span><span class="p">[</span><span class="k">this</span><span class="p">](</span><span class="k">const</span><span class="w"> </span><span class="n">SetPosition</span><span class="o">::</span><span class="n">SharedPtr</span><span class="w"> </span><span class="n">msg</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="kt">void</span>
+<span class="linenos"> 79</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos"> 80</span><span class="w">      </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">dxl_error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos"> 81</span>
+<span class="linenos"> 82</span><span class="w">      </span><span class="c1">// Position Value of X series is 4 byte data.</span>
+<span class="linenos"> 83</span><span class="w">      </span><span class="c1">// For AX &amp; MX(1.0) use 2 byte data(uint16_t) for the Position Value.</span>
+<span class="linenos"> 84</span><span class="w">      </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">goal_position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="n">msg</span><span class="o">-&gt;</span><span class="n">position</span><span class="p">;</span><span class="w">  </span><span class="c1">// Convert int32 -&gt; uint32</span>
+<span class="linenos"> 85</span>
+<span class="linenos"> 86</span><span class="w">      </span><span class="c1">// Write Goal Position (length : 4 bytes)</span>
+<span class="linenos"> 87</span><span class="w">      </span><span class="c1">// When writing 2 byte data to AX / MX(1.0), use write2ByteTxRx() instead.</span>
+<span class="linenos"> 88</span><span class="w">      </span><span class="n">dxl_comm_result</span><span class="w"> </span><span class="o">=</span>
+<span class="linenos"> 89</span><span class="w">      </span><span class="n">packetHandler</span><span class="o">-&gt;</span><span class="n">write4ByteTxRx</span><span class="p">(</span>
+<span class="linenos"> 90</span><span class="w">        </span><span class="n">portHandler</span><span class="p">,</span>
+<span class="linenos"> 91</span><span class="w">        </span><span class="p">(</span><span class="kt">uint8_t</span><span class="p">)</span><span class="w"> </span><span class="n">msg</span><span class="o">-&gt;</span><span class="n">id</span><span class="p">,</span>
+<span class="linenos"> 92</span><span class="w">        </span><span class="n">ADDR_GOAL_POSITION</span><span class="p">,</span>
+<span class="linenos"> 93</span><span class="w">        </span><span class="n">goal_position</span><span class="p">,</span>
+<span class="linenos"> 94</span><span class="w">        </span><span class="o">&amp;</span><span class="n">dxl_error</span>
+<span class="linenos"> 95</span><span class="w">      </span><span class="p">);</span>
+<span class="linenos"> 96</span>
+<span class="linenos"> 97</span><span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">dxl_comm_result</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">COMM_SUCCESS</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 98</span><span class="w">        </span><span class="n">RCLCPP_INFO</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">get_logger</span><span class="p">(),</span><span class="w"> </span><span class="s">&quot;%s&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">packetHandler</span><span class="o">-&gt;</span><span class="n">getTxRxResult</span><span class="p">(</span><span class="n">dxl_comm_result</span><span class="p">));</span>
+<span class="linenos"> 99</span><span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">dxl_error</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">100</span><span class="w">        </span><span class="n">RCLCPP_INFO</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">get_logger</span><span class="p">(),</span><span class="w"> </span><span class="s">&quot;%s&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">packetHandler</span><span class="o">-&gt;</span><span class="n">getRxPacketError</span><span class="p">(</span><span class="n">dxl_error</span><span class="p">));</span>
+<span class="linenos">101</span><span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">102</span><span class="w">        </span><span class="n">RCLCPP_INFO</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">get_logger</span><span class="p">(),</span><span class="w"> </span><span class="s">&quot;Set [ID: %d] [Goal Position: %d]&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">msg</span><span class="o">-&gt;</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">msg</span><span class="o">-&gt;</span><span class="n">position</span><span class="p">);</span>
+<span class="linenos">103</span><span class="w">      </span><span class="p">}</span>
+<span class="linenos">104</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">105</span><span class="w">    </span><span class="p">);</span>
+<span class="linenos">106</span>
+<span class="linenos">107</span><span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">get_present_position</span><span class="w"> </span><span class="o">=</span>
+<span class="linenos">108</span><span class="w">    </span><span class="p">[</span><span class="k">this</span><span class="p">](</span>
+<span class="linenos">109</span><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">GetPosition</span><span class="o">::</span><span class="n">Request</span><span class="o">&gt;</span><span class="w"> </span><span class="n">request</span><span class="p">,</span>
+<span class="linenos">110</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">GetPosition</span><span class="o">::</span><span class="n">Response</span><span class="o">&gt;</span><span class="w"> </span><span class="n">response</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="kt">void</span>
+<span class="linenos">111</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos">112</span><span class="w">      </span><span class="c1">// Read Present Position (length : 4 bytes) and Convert uint32 -&gt; int32</span>
+<span class="linenos">113</span><span class="w">      </span><span class="c1">// When reading 2 byte data from AX / MX(1.0), use read2ByteTxRx() instead.</span>
+<span class="linenos">114</span><span class="w">      </span><span class="n">dxl_comm_result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">packetHandler</span><span class="o">-&gt;</span><span class="n">read4ByteTxRx</span><span class="p">(</span>
+<span class="linenos">115</span><span class="w">        </span><span class="n">portHandler</span><span class="p">,</span>
+<span class="linenos">116</span><span class="w">        </span><span class="p">(</span><span class="kt">uint8_t</span><span class="p">)</span><span class="w"> </span><span class="n">request</span><span class="o">-&gt;</span><span class="n">id</span><span class="p">,</span>
+<span class="linenos">117</span><span class="w">        </span><span class="n">ADDR_PRESENT_POSITION</span><span class="p">,</span>
+<span class="linenos">118</span><span class="w">        </span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">present_position</span><span class="p">),</span>
+<span class="linenos">119</span><span class="w">        </span><span class="o">&amp;</span><span class="n">dxl_error</span>
+<span class="linenos">120</span><span class="w">      </span><span class="p">);</span>
+<span class="linenos">121</span>
+<span class="linenos">122</span><span class="w">      </span><span class="n">RCLCPP_INFO</span><span class="p">(</span>
+<span class="linenos">123</span><span class="w">        </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">get_logger</span><span class="p">(),</span>
+<span class="linenos">124</span><span class="w">        </span><span class="s">&quot;Get [ID: %d] [Present Position: %d]&quot;</span><span class="p">,</span>
+<span class="linenos">125</span><span class="w">        </span><span class="n">request</span><span class="o">-&gt;</span><span class="n">id</span><span class="p">,</span>
+<span class="linenos">126</span><span class="w">        </span><span class="n">present_position</span>
+<span class="linenos">127</span><span class="w">      </span><span class="p">);</span>
+<span class="linenos">128</span>
+<span class="linenos">129</span><span class="w">      </span><span class="n">response</span><span class="o">-&gt;</span><span class="n">position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">present_position</span><span class="p">;</span>
+<span class="linenos">130</span><span class="w">    </span><span class="p">};</span>
+<span class="linenos">131</span>
+<span class="linenos">132</span><span class="w">  </span><span class="n">get_position_server_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">create_service</span><span class="o">&lt;</span><span class="n">GetPosition</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;get_position&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">get_present_position</span><span class="p">);</span>
+<span class="linenos">133</span><span class="p">}</span>
+<span class="linenos">134</span>
+<span class="linenos">135</span><span class="n">ReadWriteNode</span><span class="o">::~</span><span class="n">ReadWriteNode</span><span class="p">()</span>
+<span class="linenos">136</span><span class="p">{</span>
+<span class="linenos">137</span><span class="p">}</span>
+<span class="linenos">138</span>
+<span class="linenos">139</span><span class="kt">void</span><span class="w"> </span><span class="n">setupDynamixel</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">dxl_id</span><span class="p">)</span>
+<span class="linenos">140</span><span class="p">{</span>
+<span class="linenos">141</span><span class="w">  </span><span class="c1">// Use Position Control Mode</span>
+<span class="linenos">142</span><span class="w">  </span><span class="n">dxl_comm_result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">packetHandler</span><span class="o">-&gt;</span><span class="n">write1ByteTxRx</span><span class="p">(</span>
+<span class="linenos">143</span><span class="w">    </span><span class="n">portHandler</span><span class="p">,</span>
+<span class="linenos">144</span><span class="w">    </span><span class="n">dxl_id</span><span class="p">,</span>
+<span class="linenos">145</span><span class="w">    </span><span class="n">ADDR_OPERATING_MODE</span><span class="p">,</span>
+<span class="linenos">146</span><span class="w">    </span><span class="mi">3</span><span class="p">,</span>
+<span class="linenos">147</span><span class="w">    </span><span class="o">&amp;</span><span class="n">dxl_error</span>
+<span class="linenos">148</span><span class="w">  </span><span class="p">);</span>
+<span class="linenos">149</span>
+<span class="linenos">150</span><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">dxl_comm_result</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">COMM_SUCCESS</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">151</span><span class="w">    </span><span class="n">RCLCPP_ERROR</span><span class="p">(</span><span class="n">rclcpp</span><span class="o">::</span><span class="n">get_logger</span><span class="p">(</span><span class="s">&quot;read_write_node&quot;</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to set Position Control Mode.&quot;</span><span class="p">);</span>
+<span class="linenos">152</span><span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">153</span><span class="w">    </span><span class="n">RCLCPP_INFO</span><span class="p">(</span><span class="n">rclcpp</span><span class="o">::</span><span class="n">get_logger</span><span class="p">(</span><span class="s">&quot;read_write_node&quot;</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Succeeded to set Position Control Mode.&quot;</span><span class="p">);</span>
+<span class="linenos">154</span><span class="w">  </span><span class="p">}</span>
+<span class="linenos">155</span>
+<span class="linenos">156</span><span class="w">  </span><span class="c1">// Enable Torque of DYNAMIXEL</span>
+<span class="linenos">157</span><span class="w">  </span><span class="n">dxl_comm_result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">packetHandler</span><span class="o">-&gt;</span><span class="n">write1ByteTxRx</span><span class="p">(</span>
+<span class="linenos">158</span><span class="w">    </span><span class="n">portHandler</span><span class="p">,</span>
+<span class="linenos">159</span><span class="w">    </span><span class="n">dxl_id</span><span class="p">,</span>
+<span class="linenos">160</span><span class="w">    </span><span class="n">ADDR_TORQUE_ENABLE</span><span class="p">,</span>
+<span class="linenos">161</span><span class="w">    </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">162</span><span class="w">    </span><span class="o">&amp;</span><span class="n">dxl_error</span>
+<span class="linenos">163</span><span class="w">  </span><span class="p">);</span>
+<span class="linenos">164</span>
+<span class="linenos">165</span><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">dxl_comm_result</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">COMM_SUCCESS</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">166</span><span class="w">    </span><span class="n">RCLCPP_ERROR</span><span class="p">(</span><span class="n">rclcpp</span><span class="o">::</span><span class="n">get_logger</span><span class="p">(</span><span class="s">&quot;read_write_node&quot;</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to enable torque.&quot;</span><span class="p">);</span>
+<span class="linenos">167</span><span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">168</span><span class="w">    </span><span class="n">RCLCPP_INFO</span><span class="p">(</span><span class="n">rclcpp</span><span class="o">::</span><span class="n">get_logger</span><span class="p">(</span><span class="s">&quot;read_write_node&quot;</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Succeeded to enable torque.&quot;</span><span class="p">);</span>
+<span class="linenos">169</span><span class="w">  </span><span class="p">}</span>
+<span class="linenos">170</span><span class="p">}</span>
+<span class="linenos">171</span>
+<span class="linenos">172</span><span class="kt">int</span><span class="w"> </span><span class="n">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">argv</span><span class="p">[])</span>
+<span class="linenos">173</span><span class="p">{</span>
+<span class="linenos">174</span><span class="w">  </span><span class="n">portHandler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dynamixel</span><span class="o">::</span><span class="n">PortHandler</span><span class="o">::</span><span class="n">getPortHandler</span><span class="p">(</span><span class="n">DEVICE_NAME</span><span class="p">);</span>
+<span class="linenos">175</span><span class="w">  </span><span class="n">packetHandler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dynamixel</span><span class="o">::</span><span class="n">PacketHandler</span><span class="o">::</span><span class="n">getPacketHandler</span><span class="p">(</span><span class="n">PROTOCOL_VERSION</span><span class="p">);</span>
+<span class="linenos">176</span>
+<span class="linenos">177</span><span class="w">  </span><span class="c1">// Open Serial Port</span>
+<span class="linenos">178</span><span class="w">  </span><span class="n">dxl_comm_result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">portHandler</span><span class="o">-&gt;</span><span class="n">openPort</span><span class="p">();</span>
+<span class="linenos">179</span><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">dxl_comm_result</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">false</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">180</span><span class="w">    </span><span class="n">RCLCPP_ERROR</span><span class="p">(</span><span class="n">rclcpp</span><span class="o">::</span><span class="n">get_logger</span><span class="p">(</span><span class="s">&quot;read_write_node&quot;</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to open the port!&quot;</span><span class="p">);</span>
+<span class="linenos">181</span><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="linenos">182</span><span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">183</span><span class="w">    </span><span class="n">RCLCPP_INFO</span><span class="p">(</span><span class="n">rclcpp</span><span class="o">::</span><span class="n">get_logger</span><span class="p">(</span><span class="s">&quot;read_write_node&quot;</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Succeeded to open the port.&quot;</span><span class="p">);</span>
+<span class="linenos">184</span><span class="w">  </span><span class="p">}</span>
+<span class="linenos">185</span>
+<span class="linenos">186</span><span class="w">  </span><span class="c1">// Set the baudrate of the serial port (use DYNAMIXEL Baudrate)</span>
+<span class="linenos">187</span><span class="w">  </span><span class="n">dxl_comm_result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">portHandler</span><span class="o">-&gt;</span><span class="n">setBaudRate</span><span class="p">(</span><span class="n">BAUDRATE</span><span class="p">);</span>
+<span class="linenos">188</span><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">dxl_comm_result</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">false</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">189</span><span class="w">    </span><span class="n">RCLCPP_ERROR</span><span class="p">(</span><span class="n">rclcpp</span><span class="o">::</span><span class="n">get_logger</span><span class="p">(</span><span class="s">&quot;read_write_node&quot;</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Failed to set the baudrate!&quot;</span><span class="p">);</span>
+<span class="linenos">190</span><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="linenos">191</span><span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">192</span><span class="w">    </span><span class="n">RCLCPP_INFO</span><span class="p">(</span><span class="n">rclcpp</span><span class="o">::</span><span class="n">get_logger</span><span class="p">(</span><span class="s">&quot;read_write_node&quot;</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;Succeeded to set the baudrate.&quot;</span><span class="p">);</span>
+<span class="linenos">193</span><span class="w">  </span><span class="p">}</span>
+<span class="linenos">194</span>
+<span class="linenos">195</span><span class="w">  </span><span class="n">setupDynamixel</span><span class="p">(</span><span class="n">BROADCAST_ID</span><span class="p">);</span>
+<span class="linenos">196</span>
+<span class="linenos">197</span><span class="w">  </span><span class="n">rclcpp</span><span class="o">::</span><span class="n">init</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="p">);</span>
+<span class="linenos">198</span>
+<span class="linenos">199</span><span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">readwritenode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">ReadWriteNode</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="linenos">200</span><span class="w">  </span><span class="n">rclcpp</span><span class="o">::</span><span class="n">spin</span><span class="p">(</span><span class="n">readwritenode</span><span class="p">);</span>
+<span class="linenos">201</span><span class="w">  </span><span class="n">rclcpp</span><span class="o">::</span><span class="n">shutdown</span><span class="p">();</span>
+<span class="linenos">202</span>
+<span class="linenos">203</span><span class="w">  </span><span class="c1">// Disable Torque of DYNAMIXEL</span>
+<span class="linenos">204</span><span class="w">  </span><span class="n">packetHandler</span><span class="o">-&gt;</span><span class="n">write1ByteTxRx</span><span class="p">(</span>
+<span class="linenos">205</span><span class="w">    </span><span class="n">portHandler</span><span class="p">,</span>
+<span class="linenos">206</span><span class="w">    </span><span class="n">BROADCAST_ID</span><span class="p">,</span>
+<span class="linenos">207</span><span class="w">    </span><span class="n">ADDR_TORQUE_ENABLE</span><span class="p">,</span>
+<span class="linenos">208</span><span class="w">    </span><span class="mi">0</span><span class="p">,</span>
+<span class="linenos">209</span><span class="w">    </span><span class="o">&amp;</span><span class="n">dxl_error</span>
+<span class="linenos">210</span><span class="w">  </span><span class="p">);</span>
+<span class="linenos">211</span>
+<span class="linenos">212</span><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos">213</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</details><br><br></section>
+<section id="explication-du-code">
+<h3>Explication du code<a class="headerlink" href="#explication-du-code" title="Lien vers cette rubrique"></a></h3>
+<p>Cette partie décrit comment exécuter l’exemple, comment publier sur le topic <code class="docutils literal notranslate"><span class="pre">/set_position</span></code> et comment faire une requête de service pour lire la position du moteur.</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">Lignes 15 à 28 du fichier read_write_node.cpp</span><a class="headerlink" href="#id2" title="Lien vers ce code"></a></div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cm">/*******************************************************************************</span>
+<span class="linenos"> 2</span><span class="cm">// This example is written for DYNAMIXEL X(excluding XL-320) and MX(2.0) series with U2D2.</span>
+<span class="linenos"> 3</span><span class="cm">// For other series, please refer to the product eManual and modify the Control Table addresses and other definitions.</span>
+<span class="linenos"> 4</span><span class="cm">// To test this example, please follow the commands below.</span>
+<span class="linenos"> 5</span><span class="cm">//</span>
+<span class="linenos"> 6</span><span class="cm">// Open terminal #1</span>
+<span class="linenos"> 7</span><span class="cm">// $ ros2 run dynamixel_sdk_examples read_write_node</span>
+<span class="linenos"> 8</span><span class="cm">//</span>
+<span class="linenos"> 9</span><span class="cm">// Open terminal #2 (run one of below commands at a time)</span>
+<span class="linenos">10</span><span class="cm">// $ ros2 topic pub -1 /set_position dynamixel_sdk_custom_interfaces/SetPosition &quot;{id: 1, position: 1000}&quot;</span>
+<span class="linenos">11</span><span class="cm">// $ ros2 service call /get_position dynamixel_sdk_custom_interfaces/srv/GetPosition &quot;id: 1&quot;</span>
+<span class="linenos">12</span><span class="cm">//</span>
+<span class="linenos">13</span><span class="cm">// Author: Will Son</span>
+<span class="linenos">14</span><span class="cm">*******************************************************************************/</span>
+</pre></div>
+</div>
+</div>
+<p>Cette partie du code définit <code class="docutils literal notranslate"><span class="pre">set_position_subscriber_</span></code> pour souscrire au topic <code class="docutils literal notranslate"><span class="pre">/set_position</span></code> et appeler la fonction <code class="docutils literal notranslate"><span class="pre">setPositionCallback</span></code> à chaque fois qu’un message est publié sur ce topic.</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">Lignes 74 à 105 du fichier read_write_node.cpp</span><a class="headerlink" href="#id3" title="Lien vers ce code"></a></div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="w">  </span><span class="n">set_position_subscriber_</span><span class="w"> </span><span class="o">=</span>
+<span class="linenos"> 2</span><span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">create_subscription</span><span class="o">&lt;</span><span class="n">SetPosition</span><span class="o">&gt;</span><span class="p">(</span>
+<span class="linenos"> 3</span><span class="w">    </span><span class="s">&quot;set_position&quot;</span><span class="p">,</span>
+<span class="linenos"> 4</span><span class="w">    </span><span class="n">QOS_RKL10V</span><span class="p">,</span>
+<span class="linenos"> 5</span><span class="w">    </span><span class="p">[</span><span class="k">this</span><span class="p">](</span><span class="k">const</span><span class="w"> </span><span class="n">SetPosition</span><span class="o">::</span><span class="n">SharedPtr</span><span class="w"> </span><span class="n">msg</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="kt">void</span>
+<span class="linenos"> 6</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos"> 7</span><span class="w">      </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">dxl_error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="w">      </span><span class="c1">// Position Value of X series is 4 byte data.</span>
+<span class="linenos">10</span><span class="w">      </span><span class="c1">// For AX &amp; MX(1.0) use 2 byte data(uint16_t) for the Position Value.</span>
+<span class="linenos">11</span><span class="w">      </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">goal_position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="n">msg</span><span class="o">-&gt;</span><span class="n">position</span><span class="p">;</span><span class="w">  </span><span class="c1">// Convert int32 -&gt; uint32</span>
+<span class="linenos">12</span>
+<span class="linenos">13</span><span class="w">      </span><span class="c1">// Write Goal Position (length : 4 bytes)</span>
+<span class="linenos">14</span><span class="w">      </span><span class="c1">// When writing 2 byte data to AX / MX(1.0), use write2ByteTxRx() instead.</span>
+<span class="linenos">15</span><span class="w">      </span><span class="n">dxl_comm_result</span><span class="w"> </span><span class="o">=</span>
+<span class="linenos">16</span><span class="w">      </span><span class="n">packetHandler</span><span class="o">-&gt;</span><span class="n">write4ByteTxRx</span><span class="p">(</span>
+<span class="linenos">17</span><span class="w">        </span><span class="n">portHandler</span><span class="p">,</span>
+<span class="linenos">18</span><span class="w">        </span><span class="p">(</span><span class="kt">uint8_t</span><span class="p">)</span><span class="w"> </span><span class="n">msg</span><span class="o">-&gt;</span><span class="n">id</span><span class="p">,</span>
+<span class="linenos">19</span><span class="w">        </span><span class="n">ADDR_GOAL_POSITION</span><span class="p">,</span>
+<span class="linenos">20</span><span class="w">        </span><span class="n">goal_position</span><span class="p">,</span>
+<span class="linenos">21</span><span class="w">        </span><span class="o">&amp;</span><span class="n">dxl_error</span>
+<span class="linenos">22</span><span class="w">      </span><span class="p">);</span>
+<span class="linenos">23</span>
+<span class="linenos">24</span><span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">dxl_comm_result</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">COMM_SUCCESS</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">25</span><span class="w">        </span><span class="n">RCLCPP_INFO</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">get_logger</span><span class="p">(),</span><span class="w"> </span><span class="s">&quot;%s&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">packetHandler</span><span class="o">-&gt;</span><span class="n">getTxRxResult</span><span class="p">(</span><span class="n">dxl_comm_result</span><span class="p">));</span>
+<span class="linenos">26</span><span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">dxl_error</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">27</span><span class="w">        </span><span class="n">RCLCPP_INFO</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">get_logger</span><span class="p">(),</span><span class="w"> </span><span class="s">&quot;%s&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">packetHandler</span><span class="o">-&gt;</span><span class="n">getRxPacketError</span><span class="p">(</span><span class="n">dxl_error</span><span class="p">));</span>
+<span class="linenos">28</span><span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">29</span><span class="w">        </span><span class="n">RCLCPP_INFO</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">get_logger</span><span class="p">(),</span><span class="w"> </span><span class="s">&quot;Set [ID: %d] [Goal Position: %d]&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">msg</span><span class="o">-&gt;</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">msg</span><span class="o">-&gt;</span><span class="n">position</span><span class="p">);</span>
+<span class="linenos">30</span><span class="w">      </span><span class="p">}</span>
+<span class="linenos">31</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">32</span><span class="w">    </span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<p>Cette partie du code définit le service <code class="docutils literal notranslate"><span class="pre">get_position_service_</span></code> pour lire la position du moteur en utilisant l’ID fourni dans la requête de service.</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">Lignes 107 à 133 du fichier read_write_node.cpp</span><a class="headerlink" href="#id4" title="Lien vers ce code"></a></div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">get_present_position</span><span class="w"> </span><span class="o">=</span>
+<span class="linenos"> 2</span><span class="w">    </span><span class="p">[</span><span class="k">this</span><span class="p">](</span>
+<span class="linenos"> 3</span><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">GetPosition</span><span class="o">::</span><span class="n">Request</span><span class="o">&gt;</span><span class="w"> </span><span class="n">request</span><span class="p">,</span>
+<span class="linenos"> 4</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">GetPosition</span><span class="o">::</span><span class="n">Response</span><span class="o">&gt;</span><span class="w"> </span><span class="n">response</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="kt">void</span>
+<span class="linenos"> 5</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos"> 6</span><span class="w">      </span><span class="c1">// Read Present Position (length : 4 bytes) and Convert uint32 -&gt; int32</span>
+<span class="linenos"> 7</span><span class="w">      </span><span class="c1">// When reading 2 byte data from AX / MX(1.0), use read2ByteTxRx() instead.</span>
+<span class="linenos"> 8</span><span class="w">      </span><span class="n">dxl_comm_result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">packetHandler</span><span class="o">-&gt;</span><span class="n">read4ByteTxRx</span><span class="p">(</span>
+<span class="linenos"> 9</span><span class="w">        </span><span class="n">portHandler</span><span class="p">,</span>
+<span class="linenos">10</span><span class="w">        </span><span class="p">(</span><span class="kt">uint8_t</span><span class="p">)</span><span class="w"> </span><span class="n">request</span><span class="o">-&gt;</span><span class="n">id</span><span class="p">,</span>
+<span class="linenos">11</span><span class="w">        </span><span class="n">ADDR_PRESENT_POSITION</span><span class="p">,</span>
+<span class="linenos">12</span><span class="w">        </span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">present_position</span><span class="p">),</span>
+<span class="linenos">13</span><span class="w">        </span><span class="o">&amp;</span><span class="n">dxl_error</span>
+<span class="linenos">14</span><span class="w">      </span><span class="p">);</span>
+<span class="linenos">15</span>
+<span class="linenos">16</span><span class="w">      </span><span class="n">RCLCPP_INFO</span><span class="p">(</span>
+<span class="linenos">17</span><span class="w">        </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">get_logger</span><span class="p">(),</span>
+<span class="linenos">18</span><span class="w">        </span><span class="s">&quot;Get [ID: %d] [Present Position: %d]&quot;</span><span class="p">,</span>
+<span class="linenos">19</span><span class="w">        </span><span class="n">request</span><span class="o">-&gt;</span><span class="n">id</span><span class="p">,</span>
+<span class="linenos">20</span><span class="w">        </span><span class="n">present_position</span>
+<span class="linenos">21</span><span class="w">      </span><span class="p">);</span>
+<span class="linenos">22</span>
+<span class="linenos">23</span><span class="w">      </span><span class="n">response</span><span class="o">-&gt;</span><span class="n">position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">present_position</span><span class="p">;</span>
+<span class="linenos">24</span><span class="w">    </span><span class="p">};</span>
+<span class="linenos">25</span>
+<span class="linenos">26</span><span class="w">  </span><span class="n">get_position_server_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">create_service</span><span class="o">&lt;</span><span class="n">GetPosition</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;get_position&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">get_present_position</span><span class="p">);</span>
+<span class="linenos">27</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<p>Dans le main, on itinitialise <code class="docutils literal notranslate"><span class="pre">portHandler_</span></code> et <code class="docutils literal notranslate"><span class="pre">packetHandler_</span></code> pour communiquer avec le moteur.</p>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">Lignes 174 à 175 du fichier read_write_node.cpp</span><a class="headerlink" href="#id5" title="Lien vers ce code"></a></div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="w">  </span><span class="n">portHandler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dynamixel</span><span class="o">::</span><span class="n">PortHandler</span><span class="o">::</span><span class="n">getPortHandler</span><span class="p">(</span><span class="n">DEVICE_NAME</span><span class="p">);</span>
+<span class="linenos">2</span><span class="w">  </span><span class="n">packetHandler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dynamixel</span><span class="o">::</span><span class="n">PacketHandler</span><span class="o">::</span><span class="n">getPacketHandler</span><span class="p">(</span><span class="n">PROTOCOL_VERSION</span><span class="p">);</span>
+</pre></div>
+</div>
 </div>
 </section>
 </section>
