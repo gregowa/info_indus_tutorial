@@ -12,6 +12,7 @@ Le projet de ce semestre consiste à mettre en application ce que nous avons app
    prerequis
    tutoriel
    glossaire
+   complements
 
 =================
 Ressources utiles

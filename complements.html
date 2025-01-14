@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Prérequis &mdash; Documentation Projet Informatique Industrielle avec ROS 2 1.0.0</title>
+  <title>Compléments &mdash; Documentation Projet Informatique Industrielle avec ROS 2 1.0.0</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
@@ -27,8 +27,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Recherche" href="search.html" />
-    <link rel="next" title="Tutoriel DynamixelSDK" href="tutoriel.html" />
-    <link rel="prev" title="Introduction" href="intro.html" /> 
+    <link rel="prev" title="Glossaire" href="glossaire.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -54,15 +53,13 @@
               <p class="caption" role="heading"><span class="caption-text">Tables des matières</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Prérequis</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#installation-de-vscode">Installation de VSCode</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#installation-de-ros-2-humble-pour-ubuntu-linux-22-04">Installation de ROS 2 Humble pour Ubuntu Linux 22.04</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#creation-d-un-compte-github-et-d-une-cle-ssh">Création d’un compte Github et d’une clé SSH</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="prerequis.html">Prérequis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutoriel.html">Tutoriel DynamixelSDK</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossaire.html">Glossaire</a></li>
-<li class="toctree-l1"><a class="reference internal" href="complements.html">Compléments</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Compléments</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#compiler-une-documentation-sphinx-sur-windows">Compiler une documentation Sphinx sur Windows</a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -79,9 +76,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Prérequis</li>
+      <li class="breadcrumb-item active">Compléments</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/prerequis.rst.txt" rel="nofollow"> Afficher la source de la page</a>
+            <a href="_sources/complements.rst.txt" rel="nofollow"> Afficher la source de la page</a>
       </li>
   </ul>
   <hr/>
@@ -89,27 +86,19 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="prerequis">
-<h1>Prérequis<a class="headerlink" href="#prerequis" title="Lien vers cette rubrique"></a></h1>
-<section id="installation-de-vscode">
-<h2>Installation de VSCode<a class="headerlink" href="#installation-de-vscode" title="Lien vers cette rubrique"></a></h2>
-<p>Il est fortement recommandé d’utiliser Visual Studio Code pour éditer les fichiers de code. Pour installer VSCode, vous devez d’abord télécharger le logiciel sur le <a class="reference external" href="https://code.visualstudio.com/download">site officiel</a></p>
-</section>
-<section id="installation-de-ros-2-humble-pour-ubuntu-linux-22-04">
-<h2>Installation de ROS 2 Humble pour Ubuntu Linux 22.04<a class="headerlink" href="#installation-de-ros-2-humble-pour-ubuntu-linux-22-04" title="Lien vers cette rubrique"></a></h2>
-<p>Installer ROS 2 Humble pour Ubuntu Linux 22.04 avant de commencer le tutoriel en suivant la documentation officielle de ROS 2 Humble. Suivre l’installation jusqu’au point <strong>Install additional DDS implementations (optional)</strong>.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Lien vers l’installation <a class="reference external" href="https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html">ici</a>.</p>
+  <section id="complements">
+<h1>Compléments<a class="headerlink" href="#complements" title="Lien vers cette rubrique"></a></h1>
+<section id="compiler-une-documentation-sphinx-sur-windows">
+<h2>Compiler une documentation Sphinx sur Windows<a class="headerlink" href="#compiler-une-documentation-sphinx-sur-windows" title="Lien vers cette rubrique"></a></h2>
+<p>Si vous utilisez Windows, il est également possible de compiler une documentation Sphinx. Ouvrez un terminal et placez vous dans le dossier <code class="docutils literal notranslate"><span class="pre">../doc/sphinx</span></code>. Si vous êtes à la racine de votre projet, utilisez la commande :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>doc/sphinx
+</pre></div>
 </div>
-</section>
-<section id="creation-d-un-compte-github-et-d-une-cle-ssh">
-<h2>Création d’un compte Github et d’une clé SSH<a class="headerlink" href="#creation-d-un-compte-github-et-d-une-cle-ssh" title="Lien vers cette rubrique"></a></h2>
-<p>Il va falloir créer un compte Github pour pouvoir cloner le dépôt de DynamixelSDK. Il sera nécessaire de créer une clé SSH pour éviter de devoir rentrer son nom d’utilisateur et son mot de passe à chaque fois que l’on veut cloner un dépôt.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Si vous avez déjà un compte Github et une clé SSH, vous pouvez passer cette étape. Sinon suivez le tutoriel <a class="reference external" href="https://yguel.github.io/informatique_industrielle_avec_ROS2/c01_create_and_publish_doc/p01s05_www_doc.html#creer-un-depot-sur-github">ici</a>.</p>
+<p>Finalement, et utilisez la commande suivante pour compiler:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./make.bat<span class="w"> </span>html
+</pre></div>
 </div>
+<p>Vos pages <code class="docutils literal notranslate"><span class="pre">html</span></code> se trouvent dans le dossier <code class="docutils literal notranslate"><span class="pre">../doc/sphinx/build/html</span></code>.</p>
 </section>
 </section>
 
@@ -117,8 +106,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pied de page">
-        <a href="intro.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Précédent</a>
-        <a href="tutoriel.html" class="btn btn-neutral float-right" title="Tutoriel DynamixelSDK" accesskey="n" rel="next">Suivant <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="glossaire.html" class="btn btn-neutral float-left" title="Glossaire" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Précédent</a>
     </div>
 
   <hr/>

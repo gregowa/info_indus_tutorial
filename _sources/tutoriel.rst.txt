@@ -103,7 +103,7 @@ Example de code C++
 Code complet
 ============
 
-Il est maintenant le temps de réaliser un exemple de code C++ pour lire et écrire des données sur un moteur Dynamixel AX12A. Vous pouvez consulter le code complet ci-dessous.
+Il est maintenant le temps de réaliser un exemple de code C++ pour lire et écrire des données sur un moteur Dynamixel AX12A. Vous pouvez consulter le code complet ci-dessous. Les parties importantes du code sont surlignées et expliquées dans la partie suivante.
 
 .. raw:: html
 
@@ -114,6 +114,7 @@ Il est maintenant le temps de réaliser un exemple de code C++ pour lire et écr
    :language: cpp
    :caption: Fichier cpp read_write_node.cpp
    :linenos:
+   :emphasize-lines: 15-28, 74-105, 107-133, 174-175
 
 .. raw:: html
 
@@ -131,7 +132,7 @@ Cette partie décrit comment exécuter l'exemple, comment publier sur le topic `
 .. literalinclude:: ressources/code/read_write_node.cpp
    :language: cpp
    :caption: Lignes 15 à 28 du fichier read_write_node.cpp
-   :linenos:
+   :lineno-start: 15
    :lines: 15-28
 
 Cette partie du code définit ``set_position_subscriber_`` pour souscrire au topic ``/set_position`` et appeler la fonction ``setPositionCallback`` à chaque fois qu'un message est publié sur ce topic.
@@ -139,7 +140,7 @@ Cette partie du code définit ``set_position_subscriber_`` pour souscrire au top
 .. literalinclude:: ressources/code/read_write_node.cpp
    :language: cpp
    :caption: Lignes 74 à 105 du fichier read_write_node.cpp
-   :linenos:
+   :lineno-start: 74
    :lines: 74-105
 
 Cette partie du code définit le service ``get_position_service_`` pour lire la position du moteur en utilisant l'ID fourni dans la requête de service.
@@ -147,7 +148,7 @@ Cette partie du code définit le service ``get_position_service_`` pour lire la 
 .. literalinclude:: ressources/code/read_write_node.cpp
    :language: cpp
    :caption: Lignes 107 à 133 du fichier read_write_node.cpp
-   :linenos:
+   :lineno-start: 107
    :lines: 107-133
 
 Dans le main, on itinitialise ``portHandler_`` et ``packetHandler_`` pour communiquer avec le moteur.
@@ -155,5 +156,5 @@ Dans le main, on itinitialise ``portHandler_`` et ``packetHandler_`` pour commun
 .. literalinclude:: ressources/code/read_write_node.cpp
    :language: cpp
    :caption: Lignes 174 à 175 du fichier read_write_node.cpp
-   :linenos:
+   :lineno-start: 174
    :lines: 174-175
