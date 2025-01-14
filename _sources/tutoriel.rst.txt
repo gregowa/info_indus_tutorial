@@ -151,7 +151,7 @@ Cette partie du code définit le service ``get_position_service_`` pour lire la 
    :lineno-start: 107
    :lines: 107-133
 
-Dans le main, on itinitialise ``portHandler_`` et ``packetHandler_`` pour communiquer avec le moteur.
+Dans le main, on initialise ``portHandler_`` et ``packetHandler_`` pour communiquer avec le moteur.
 
 .. literalinclude:: ressources/code/read_write_node.cpp
    :language: cpp
